@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import { ApolloProvider } from '@apollo/react-hooks';
+import client from './client';
+import {Typography, Container, makeStyles} from "@material-ui/core";
+import RepositoryList from "./RepositoryList";
+import SearchBar from "./SearchBar";
 
-function App() {
+const useStyles = makeStyles({
+  title: {
+    marginTop: '1rem',
+    marginBottom: '1rem',
+    textAlign: 'center'
+  }
+});
+
+const App = () => {
+  const classes = useStyles();
+  const [searchTerm, setSearchTerm] = useState('');
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <Container maxWidth={'sm'}>
+        <Typography variant={'h3'} className={classes.title}>GraphQL Github Client</Typography>
+        <SearchBar value={searchTerm} onChange={setSearchTerm}/>
+        <RepositoryList searchTerm={searchTerm}/>
+      </Container>
+    </ApolloProvider>
   );
-}
+};
 
 export default App;
